@@ -625,3 +625,448 @@ curl -X GET http://localhost:5000/users/history \
 }
 ```
 
+### GET /videos
+
+Fetches a list of videos based on query, sort, and pagination parameters.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Query Parameters
+- `page` (number, optional): The page number for pagination. Default is `1`.
+- `limit` (number, optional): The number of videos per page. Default is `10`.
+- `query` (string, optional): Search query for video title or description.
+- `sortBy` (string, optional): Field to sort by (e.g., `title`, `createdAt`).
+- `sortType` (string, optional): Sort order (`asc` or `desc`).
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "_id": "videoId",
+        "title": "Video Title",
+        "description": "Video Description",
+        "thumbnail": "thumbnail_url",
+        "createdBy": {
+          "fullName": "Owner's Full Name",
+          "username": "ownerUsername",
+          "avatar": "owner_avatar_url"
+        }
+      }
+    ],
+    "message": "Video fetched successfully"
+  }
+  ```
+
+#### Errors
+- **404 Not Found**: No videos found.
+- **500 Internal Server Error**: Error during fetching videos.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/videos?page=1&limit=10&query=sample \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+      "title": "Sample Video",
+      "description": "This is a sample video description.",
+      "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+      "createdBy": {
+        "fullName": "John Doe",
+        "username": "johndoe",
+        "avatar": "https://cloudinary.com/avatar.jpg"
+      }
+    }
+  ],
+  "message": "Video fetched successfully"
+}
+```
+
+### GET /videos/:videoId
+
+Fetches the details of a specific video by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `videoId` (string, required): The ID of the video to fetch.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "videoId",
+      "title": "Video Title",
+      "description": "Video Description",
+      "thumbnail": "thumbnail_url",
+      "videoFile": "video_file_url",
+      "createdBy": {
+        "fullName": "Owner's Full Name",
+        "username": "ownerUsername",
+        "avatar": "owner_avatar_url"
+      }
+    },
+    "message": "Video fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid video ID.
+- **404 Not Found**: Video not found.
+- **500 Internal Server Error**: Error during fetching video details.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/videos/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "title": "Sample Video",
+    "description": "This is a sample video description.",
+    "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+    "videoFile": "https://cloudinary.com/video.mp4",
+    "createdBy": {
+      "fullName": "John Doe",
+      "username": "johndoe",
+      "avatar": "https://cloudinary.com/avatar.jpg"
+    }
+  },
+  "message": "Video fetched successfully"
+}
+```
+
+### PATCH /videos/toggle/publish/:videoId
+
+Toggles the publish status of a specific video by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `videoId` (string, required): The ID of the video to toggle publish status.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "videoId",
+      "title": "Video Title",
+      "description": "Video Description",
+      "thumbnail": "thumbnail_url",
+      "videoFile": "video_file_url",
+      "isPublished": true,
+      "createdBy": {
+        "fullName": "Owner's Full Name",
+        "username": "ownerUsername",
+        "avatar": "owner_avatar_url"
+      }
+    },
+    "message": "Video published status modified"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid video ID.
+- **403 Forbidden**: User is not authorized to toggle the publish status of this video.
+- **404 Not Found**: Video not found.
+- **500 Internal Server Error**: Error during toggling publish status.
+
+#### Example Request
+```bash
+curl -X PATCH http://localhost:5000/videos/toggle/publish/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "title": "Sample Video",
+    "description": "This is a sample video description.",
+    "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+    "videoFile": "https://cloudinary.com/video.mp4",
+    "isPublished": true,
+    "createdBy": {
+      "fullName": "John Doe",
+      "username": "johndoe",
+      "avatar": "https://cloudinary.com/avatar.jpg"
+    }
+  },
+  "message": "Video published status modified"
+}
+```
+
+### GET /subscriptions/c/:subscriberId
+
+Fetches the list of channels to which a user has subscribed.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `subscriberId` (string, required): The ID of the subscriber whose subscribed channels are to be fetched.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "channelId": "channelId",
+        "channelName": "Channel Name",
+        "channelAvatar": "channel_avatar_url"
+      }
+    ],
+    "message": "Subscribed channels fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid subscriber ID.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during fetching subscribed channels.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/subscriptions/c/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "channelId": "64f1c2e5b5d6c2a1e8f7a9b3",
+      "channelName": "Sample Channel",
+      "channelAvatar": "https://cloudinary.com/channel_avatar.jpg"
+    }
+  ],
+  "message": "Subscribed channels fetched successfully"
+}
+```
+
+### GET /subscriptions/u/:channelId
+
+Fetches the list of subscribers for a specific channel by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `channelId` (string, required): The ID of the channel whose subscribers are to be fetched.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "subscriberId": "subscriberId",
+        "subscriberName": "Subscriber Name",
+        "subscriberAvatar": "subscriber_avatar_url"
+      }
+    ],
+    "message": "Subscribers list fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid channel ID.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during fetching subscribers list.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/subscriptions/u/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "subscriberId": "64f1c2e5b5d6c2a1e8f7a9b3",
+      "subscriberName": "John Doe",
+      "subscriberAvatar": "https://cloudinary.com/subscriber_avatar.jpg"
+    }
+  ],
+  "message": "Subscribers list fetched successfully"
+}
+```
+
+### POST /playlists
+
+Creates a new playlist for the currently logged-in user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+- `Content-Type`: application/json
+
+#### Request Body
+- `name` (string, required): The name of the playlist.
+- `description` (string, required): A description of the playlist.
+
+#### Response
+- **Status Code**: `201 Created`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "playlistId",
+      "name": "Playlist Name",
+      "description": "Playlist Description",
+      "owner": "userId",
+      "videos": []
+    },
+    "message": "Playlist created Successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Missing required fields or invalid data.
+- **500 Internal Server Error**: Error during playlist creation.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/playlists \
+-H "Authorization: Bearer <access_token>" \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "My Playlist",
+  "description": "This is a sample playlist."
+}'
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "name": "My Playlist",
+    "description": "This is a sample playlist.",
+    "owner": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "videos": []
+  },
+  "message": "Playlist created Successfully"
+}
+```
+
+### GET /playlists/:playlistId
+
+Fetches the details of a specific playlist by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `playlistId` (string, required): The ID of the playlist to fetch.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "playlistId",
+      "name": "Playlist Name",
+      "description": "Playlist Description",
+      "createdBy": {
+        "username": "ownerUsername",
+        "fullName": "Owner's Full Name",
+        "avatar": "owner_avatar_url"
+      },
+      "videos": [
+        {
+          "title": "Video Title",
+          "description": "Video Description",
+          "thumbnail": "thumbnail_url",
+          "owner": {
+            "username": "videoOwnerUsername",
+            "fullName": "Video Owner's Full Name",
+            "avatar": "video_owner_avatar_url"
+          }
+        }
+      ]
+    },
+    "message": "Playlist fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid playlist ID.
+- **404 Not Found**: Playlist not found.
+- **500 Internal Server Error**: Error during fetching playlist details.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/playlists/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "name": "My Playlist",
+    "description": "This is a sample playlist.",
+    "createdBy": {
+      "username": "johndoe",
+      "fullName": "John Doe",
+      "avatar": "https://cloudinary.com/avatar.jpg"
+    },
+    "videos": [
+      {
+        "title": "Sample Video",
+        "description": "This is a sample video description.",
+        "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+        "owner": {
+          "username": "janedoe",
+          "fullName": "Jane Doe",
+          "avatar": "https://cloudinary.com/video_owner_avatar.jpg"
+        }
+      }
+    ]
+  },
+  "message": "Playlist fetched successfully"
+}
+```
+
