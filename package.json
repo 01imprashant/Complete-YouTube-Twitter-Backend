@@ -14,7 +14,7 @@
   "author": "Prashant Mishra",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   },
   "dependencies": {
