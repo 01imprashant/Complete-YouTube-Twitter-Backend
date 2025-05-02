@@ -822,6 +822,318 @@ curl -X PATCH http://localhost:5000/videos/toggle/publish/64f1c2e5b5d6c2a1e8f7a9
 }
 ```
 
+### POST /likes/toggle/v/:videoId
+
+Toggles the like status of a specific video by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `videoId` (string, required): The ID of the video to toggle the like status.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "videoId": "videoId",
+      "liked": true,
+      "totalLikes": 123
+    },
+    "message": "Video liked successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `videoId`.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during toggling like status.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/likes/toggle/v/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "videoId": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "liked": true,
+    "totalLikes": 123
+  },
+  "message": "Video liked successfully"
+}
+```
+
+### POST /likes/toggle/c/:commentId
+
+Toggles the like status of a specific comment by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `commentId` (string, required): The ID of the comment to toggle the like status.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "commentId": "commentId",
+      "liked": true,
+      "totalLikes": 45
+    },
+    "message": "Comment liked successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `commentId`.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during toggling like status.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/likes/toggle/c/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "commentId": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "liked": true,
+    "totalLikes": 45
+  },
+  "message": "Comment liked successfully"
+}
+```
+
+### POST /likes/toggle/t/:tweetId
+
+Toggles the like status of a specific tweet by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `tweetId` (string, required): The ID of the tweet to toggle the like status.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "tweetId": "tweetId",
+      "liked": true,
+      "totalLikes": 67
+    },
+    "message": "Tweet liked successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `tweetId`.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during toggling like status.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/likes/toggle/t/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "tweetId": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "liked": true,
+    "totalLikes": 67
+  },
+  "message": "Tweet liked successfully"
+}
+```
+
+### GET /likes/videos
+
+Fetches all videos liked by the currently logged-in user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "_id": "videoId",
+        "title": "Video Title",
+        "description": "Video Description"
+      }
+    ],
+    "message": "Liked videos retrieved successfully"
+  }
+  ```
+
+#### Errors
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during fetching liked videos.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/likes/videos \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+      "title": "Sample Video",
+      "description": "This is a sample video description."
+    }
+  ],
+  "message": "Liked videos retrieved successfully"
+}
+```
+
+### GET /comments/:videoId
+
+Fetches all comments for a specific video.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `videoId` (string, required): The ID of the video whose comments are to be fetched.
+
+#### Query Parameters
+- `page` (number, optional): The page number for pagination. Default is `1`.
+- `limit` (number, optional): The number of comments per page. Default is `10`.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "content": "Comment content",
+        "createdAt": "2025-05-03T12:34:56.789Z",
+        "createdBy": {
+          "username": "user123",
+          "fullName": "User Full Name",
+          "avatar": "user_avatar_url"
+        }
+      }
+    ],
+    "message": "Comments fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `videoId`.
+- **404 Not Found**: Video not found.
+- **500 Internal Server Error**: Error while fetching comments.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/comments/64f1c2e5b5d6c2a1e8f7a9b3?page=1&limit=10 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "content": "This is a sample comment.",
+      "createdAt": "2025-05-03T12:34:56.789Z",
+      "createdBy": {
+        "username": "johndoe",
+        "fullName": "John Doe",
+        "avatar": "https://cloudinary.com/avatar.jpg"
+      }
+    }
+  ],
+  "message": "Comments fetched successfully"
+}
+```
+
+### DELETE /comments/c/:commentId
+
+Deletes a specific comment by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `commentId` (string, required): The ID of the comment to delete.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "commentId",
+      "content": "Comment content",
+      "createdAt": "2025-05-03T12:34:56.789Z"
+    },
+    "message": "Comment deleted successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `commentId`.
+- **403 Forbidden**: User is not authorized to delete this comment.
+- **404 Not Found**: Comment not found.
+- **500 Internal Server Error**: Error while deleting the comment.
+
+#### Example Request
+```bash
+curl -X DELETE http://localhost:5000/comments/c/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "content": "This is a sample comment.",
+    "createdAt": "2025-05-03T12:34:56.789Z"
+  },
+  "message": "Comment deleted successfully"
+}
+```
+
+
 ### GET /subscriptions/c/:subscriberId
 
 Fetches the list of channels to which a user has subscribed.
@@ -928,7 +1240,7 @@ curl -X GET http://localhost:5000/subscriptions/u/64f1c2e5b5d6c2a1e8f7a9b3 \
 }
 ```
 
-### POST /playlists
+### POST /playlist
 
 Creates a new playlist for the currently logged-in user.
 
@@ -987,7 +1299,7 @@ curl -X POST http://localhost:5000/playlists \
 }
 ```
 
-### GET /playlists/:playlistId
+### GET /playlist/:playlistId
 
 Fetches the details of a specific playlist by its ID.
 
@@ -1070,3 +1382,533 @@ curl -X GET http://localhost:5000/playlists/64f1c2e5b5d6c2a1e8f7a9b3 \
 }
 ```
 
+### PATCH /playlist/add/:videoId/:playlistId
+
+Adds a video to a specific playlist.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `playlistId` (string, required): The ID of the playlist to which the video will be added.
+- `videoId` (string, required): The ID of the video to add to the playlist.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "playlistId",
+      "name": "Playlist Name",
+      "description": "Playlist Description",
+      "owner": "userId",
+      "videos": [
+        "videoId1",
+        "videoId2",
+        "videoId3"
+      ]
+    },
+    "message": "Video added to playlist successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `playlistId` or `videoId`, or video already exists in the playlist.
+- **403 Forbidden**: User is not authorized to modify the playlist.
+- **404 Not Found**: Playlist not found.
+- **500 Internal Server Error**: Error while adding the video to the playlist.
+
+#### Example Request
+```bash
+curl -X PATCH http://localhost:5000/playlists/add/64f1c2e5b5d6c2a1e8f7a9b3/64f1c2e5b5d6c2a1e8f7a9b4 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b4",
+    "name": "My Playlist",
+    "description": "This is a sample playlist.",
+    "owner": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "videos": [
+      "64f1c2e5b5d6c2a1e8f7a9b5",
+      "64f1c2e5b5d6c2a1e8f7a9b6"
+    ]
+  },
+  "message": "Video added to playlist successfully"
+}
+```
+
+### PATCH /playlist/remove/:videoId/:playlistId
+
+Removes a video from a specific playlist.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `playlistId` (string, required): The ID of the playlist from which the video will be removed.
+- `videoId` (string, required): The ID of the video to remove from the playlist.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "playlistId",
+      "name": "Playlist Name",
+      "description": "Playlist Description",
+      "owner": "userId",
+      "videos": [
+        "videoId1",
+        "videoId3"
+      ]
+    },
+    "message": "Video removed from playlist successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `playlistId` or `videoId`, or video does not exist in the playlist.
+- **403 Forbidden**: User is not authorized to modify the playlist.
+- **404 Not Found**: Playlist not found.
+- **500 Internal Server Error**: Error while removing the video from the playlist.
+
+#### Example Request
+```bash
+curl -X PATCH http://localhost:5000/playlists/remove/64f1c2e5b5d6c2a1e8f7a9b3/64f1c2e5b5d6c2a1e8f7a9b4 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b4",
+    "name": "My Playlist",
+    "description": "This is a sample playlist.",
+    "owner": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "videos": [
+      "64f1c2e5b5d6c2a1e8f7a9b5"
+    ]
+  },
+  "message": "Video removed from playlist successfully"
+}
+```
+
+### GET /playlist/user/:userId
+
+Fetches all playlists created by a specific user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `userId` (string, required): The ID of the user whose playlists are to be fetched.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "_id": "playlistId",
+        "name": "Playlist Name",
+        "description": "Playlist Description",
+        "createdBy": {
+          "username": "userUsername",
+          "fullName": "User's Full Name",
+          "avatar": "user_avatar_url"
+        },
+        "videos": [
+          {
+            "title": "Video Title",
+            "description": "Video Description",
+            "thumbnail": "video_thumbnail_url",
+            "owner": {
+              "username": "videoOwnerUsername",
+              "fullName": "Video Owner's Full Name",
+              "avatar": "video_owner_avatar_url"
+            }
+          }
+        ]
+      }
+    ],
+    "message": "Playlist fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `userId`.
+- **404 Not Found**: No playlists found for the user.
+- **500 Internal Server Error**: Error while fetching playlists.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/playlists/user/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "_id": "64f1c2e5b5d6c2a1e8f7a9b4",
+      "name": "My Playlist",
+      "description": "This is a sample playlist.",
+      "createdBy": {
+        "username": "johndoe",
+        "fullName": "John Doe",
+        "avatar": "https://cloudinary.com/avatar.jpg"
+      },
+      "videos": [
+        {
+          "title": "Sample Video",
+          "description": "This is a sample video description.",
+          "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+          "owner": {
+            "username": "janedoe",
+            "fullName": "Jane Doe",
+            "avatar": "https://cloudinary.com/video_owner_avatar.jpg"
+          }
+        }
+      ]
+    }
+  ],
+  "message": "Playlist fetched successfully"
+}
+```
+
+
+### POST /tweets/
+
+Creates a new tweet for the currently logged-in user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+- `Content-Type`: application/json
+
+#### Request Body
+- `content` (string, required): The content of the tweet.
+
+#### Response
+- **Status Code**: `201 Created`
+- **Body**:
+  ```json
+  {
+    "status": 201,
+    "data": {
+      "_id": "tweetId",
+      "content": "Tweet content",
+      "owner": "userId",
+      "createdAt": "2025-05-03T12:34:56.789Z"
+    },
+    "message": "Tweet created successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Missing or invalid `content`.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error during tweet creation.
+
+#### Example Request
+```bash
+curl -X POST http://localhost:5000/tweets/ \
+-H "Authorization: Bearer <access_token>" \
+-H "Content-Type: application/json" \
+-d '{
+  "content": "This is a sample tweet."
+}'
+```
+
+#### Example Response
+```json
+{
+  "status": 201,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "content": "This is a sample tweet.",
+    "owner": "64f1c2e5b5d6c2a1e8f7a9b4",
+    "createdAt": "2025-05-03T12:34:56.789Z"
+  },
+  "message": "Tweet created successfully"
+}
+```
+
+### GET /tweets/user/:userId
+
+Fetches all tweets created by a specific user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `userId` (string, required): The ID of the user whose tweets are to be fetched.
+
+#### Query Parameters
+- `page` (number, optional): The page number for pagination. Default is `1`.
+- `limit` (number, optional): The number of tweets per page. Default is `10`.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "content": "Tweet content",
+        "createdAt": "2025-05-03T12:34:56.789Z",
+        "owner": {
+          "username": "user123",
+          "fullname": "User Full Name",
+          "avatar": "user_avatar_url"
+        }
+      }
+    ],
+    "message": "Tweets fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `userId`.
+- **404 Not Found**: No tweets found for the user.
+- **500 Internal Server Error**: Error while fetching tweets.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/tweets/user/64f1c2e5b5d6c2a1e8f7a9b3?page=1&limit=10 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "content": "This is a sample tweet.",
+      "createdAt": "2025-05-03T12:34:56.789Z",
+      "owner": {
+        "username": "johndoe",
+        "fullname": "John Doe",
+        "avatar": "https://cloudinary.com/avatar.jpg"
+      }
+    }
+  ],
+  "message": "Tweets fetched successfully"
+}
+```
+
+### DELETE /tweets/:tweetId
+
+Deletes a specific tweet by its ID.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Path Parameters
+- `tweetId` (string, required): The ID of the tweet to delete.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "_id": "tweetId",
+      "content": "Tweet content",
+      "owner": "userId",
+      "createdAt": "2025-05-03T12:34:56.789Z"
+    },
+    "message": "Tweet deleted successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid `tweetId`.
+- **403 Forbidden**: User is not authorized to delete this tweet.
+- **404 Not Found**: Tweet not found.
+- **500 Internal Server Error**: Error while deleting the tweet.
+
+#### Example Request
+```bash
+curl -X DELETE http://localhost:5000/tweets/64f1c2e5b5d6c2a1e8f7a9b3 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+    "content": "This is a sample tweet.",
+    "owner": "64f1c2e5b5d6c2a1e8f7a9b4",
+    "createdAt": "2025-05-03T12:34:56.789Z"
+  },
+  "message": "Tweet deleted successfully"
+}
+```
+
+### GET /dashboard/stats
+
+Fetches the channel statistics for the currently logged-in user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": {
+      "totalVideos": 10,
+      "totalSubscribers": 200,
+      "totalLikes": 500,
+      "totalViews": 10000
+    },
+    "message": "Channel stats fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Missing or invalid channel ID.
+- **401 Unauthorized**: User is not authenticated.
+- **500 Internal Server Error**: Error while fetching channel stats.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/dashboard/stats \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": {
+    "totalVideos": 10,
+    "totalSubscribers": 200,
+    "totalLikes": 500,
+    "totalViews": 10000
+  },
+  "message": "Channel stats fetched successfully"
+}
+```
+
+### GET /dashboard/videos
+
+Fetches all videos uploaded by the currently logged-in user.
+
+#### Request Headers
+- `Authorization`: Bearer token (required)
+
+#### Query Parameters
+- `page` (number, optional): The page number for pagination. Default is `1`.
+- `limit` (number, optional): The number of videos per page. Default is `10`.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": [
+      {
+        "_id": "videoId",
+        "title": "Video Title",
+        "description": "Video Description",
+        "thumbnail": "thumbnail_url",
+        "createdBy": {
+          "username": "ownerUsername",
+          "fullName": "Owner's Full Name",
+          "avatar": "owner_avatar_url"
+        },
+        "createdAt": "2025-05-03T12:34:56.789Z"
+      }
+    ],
+    "message": "Videos fetched successfully"
+  }
+  ```
+
+#### Errors
+- **400 Bad Request**: Invalid channel ID.
+- **401 Unauthorized**: User is not authenticated.
+- **404 Not Found**: No videos found.
+- **500 Internal Server Error**: Error while fetching videos.
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/dashboard/videos?page=1&limit=10 \
+-H "Authorization: Bearer <access_token>"
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": [
+    {
+      "_id": "64f1c2e5b5d6c2a1e8f7a9b3",
+      "title": "Sample Video",
+      "description": "This is a sample video description.",
+      "thumbnail": "https://cloudinary.com/thumbnail.jpg",
+      "createdBy": {
+        "username": "johndoe",
+        "fullName": "John Doe",
+        "avatar": "https://cloudinary.com/avatar.jpg"
+      },
+      "createdAt": "2025-05-03T12:34:56.789Z"
+    }
+  ],
+  "message": "Videos fetched successfully"
+}
+```
+
+### GET /healthcheck/
+
+Performs a health check to verify if the server is running and operational.
+
+#### Response
+- **Status Code**: `200 OK`
+- **Body**:
+  ```json
+  {
+    "status": 200,
+    "data": "OK",
+    "message": "OK"
+  }
+  ```
+
+#### Example Request
+```bash
+curl -X GET http://localhost:5000/healthcheck/
+```
+
+#### Example Response
+```json
+{
+  "status": 200,
+  "data": "OK",
+  "message": "OK"
+}
+```
+
+[API Collection of YouTube-Twitter](https://prashantmishra-7814637.postman.co/workspace/My-Workspace~8cc54438-5f72-4e15-8401-089e0b73b6bb/collection/43735339-6e4590bf-9d76-429b-96ff-e6be41dcc6bf?action=share&creator=43735339&active-environment=43735339-8f039282-b5b7-46f3-b777-a91586c6a091)
